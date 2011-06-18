@@ -17,16 +17,13 @@ class FormBuilder
 	public static function createFormTable($fields, FormResult $result = null)
 	{
 		$table = new HTMLElement('table');
+		$hiddenInputs = array();
 
 		foreach ($fields as $id => $field)
 		{
-			$row = new HTMLElement('tr');
-			$table->appendChildren($row);
-			$header = new HTMLElement('th');
-			$cell = new HTMLElement('td');
-			$row->appendChildren($header, $cell);
+			$type = isset($field['type']) ? $field['type'] : 'text';
 
-			switch (@$field['type'])
+			switch ($type)
 			{
 				case 'textarea':
 					$input = new HTMLElement('textarea');
@@ -41,11 +38,25 @@ class FormBuilder
 					$input->value = @$result->$id;
 			}
 
+			$input->id = $input->name = $id;
+
+			if ($type == 'hidden')
+			{
+				$input->type = $type;
+				$hiddenInputs[$id] = $input;
+				continue;
+			}
+
+			$row = new HTMLElement('tr');
+			$table->appendChildren($row);
+			$header = new HTMLElement('th');
+			$cell = new HTMLElement('td');
+			$row->appendChildren($header, $cell);
 			$label = new HTMLElement('label');
 			$header->appendChildren($label);
 			$cell->appendChildren($input);
 
-			$input->id = $input->name = $label->for = $id;
+			$label->for = $id;
 			$row->title = $input->title = $label->title = $field['title'];
 			$label->appendChildren(self::idToName($id));
 
@@ -55,14 +66,13 @@ class FormBuilder
 				$row->title = implode(" \n", $result->getFieldErrors($id));
 			}
 
-			if (!empty($field['type'])
-			 && in_array($field['type'], array('float', 'integer', 'number')))
+			if (in_array($type, array('float', 'integer', 'number')))
 			{
 				self::numberFieldToInput($field, $input, $cell);
 			}
 		}
 
-		return $table;
+		return array($table, $hiddenInputs);
 	}
 
 	private static function numberFieldToInput($field, $input, $cell)
@@ -227,7 +237,11 @@ class FormValidator
 		$name = FormBuilder::idToName($id);
 		if ($value === null)
 		{
-			if ($this->getProperty($id, 'required') === True)
+			if ($this->getProperty($id, 'type') == 'hidden')
+			{
+				$result->addError($id, "Invalid '$id' supplied.");
+			}
+			elseif ($this->getProperty($id, 'required') === True)
 			{
 				$result->addError($id, "Required field '$name' not completed.");
 			}
