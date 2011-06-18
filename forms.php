@@ -30,13 +30,15 @@ class FormBuilder
 			{
 				case 'textarea':
 					$input = new HTMLElement('textarea');
+					$input->appendChildren(@$result->$id);
 					break;
 				case 'select':
 					$options = self::idToNameArray($field['options']);
-					$input = HTML::select($options);
+					$input = HTML::select($options, null, @$result->$id);
 					break;
 				default:
 					$input = new HTMLElement('input');
+					$input->value = @$result->$id;
 			}
 
 			$label = new HTMLElement('label');
