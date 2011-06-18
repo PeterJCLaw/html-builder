@@ -141,12 +141,19 @@ class HTMLElement
 	}
 
 	/**
-	 * Append an arbirary number of children to the element.
+	 * Append an arbitrary number of children to the element.
 	 * @param children Children to add. These can be HTMLElements or strings.
+	 * @param isArray Whether or not the arguments are passed as an array.
+	 *   When True the second parameter is treated as the array of children to add.
+	 *   Otherwise the array of all parameters is used to supply the children.
 	 */
-	public function appendChildren($children)
+	public function appendChildren($children, $isArray = False)
 	{
-		$this->children = array_merge($this->children, func_get_args());
+		if ($isArray !== True)
+		{
+			$children = func_get_args();
+		}
+		$this->children = array_merge($this->children, $children);
 	}
 
 	/**
