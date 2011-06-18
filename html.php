@@ -31,9 +31,10 @@ class HTML
 	 * Convenience function that creates a select HTMLElement with the given options.
 	 * @param options A list of options to use. If the array is associative then the keys are used as the values for the options.
 	 * @param attributes An array of attributes suitable for passing to arrayToAttributes.
+	 * @param selected The value of the selected option.
 	 * @returns An input element with the given attributes.
 	 */
-	public static function select($options, $attributes = null)
+	public static function select($options, $attributes = null, $selected = null)
 	{
 		$select = new HTMLElement('select', $attributes);
 		$isAssoc = isAssoc($options);
@@ -41,6 +42,10 @@ class HTML
 		{
 			$opt = new HTMLElement('option');
 			$opt->value = $isAssoc ? $value : $option;
+			if ($opt->value == $selected)
+			{
+				$opt->selected = 'selected';
+			}
 			$opt->appendChildren($option);
 			$select->appendChildren($opt);
 		}
