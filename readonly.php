@@ -29,7 +29,15 @@ class ReadOnlyBase
 	{
 		if ($this->isReadOnly === True)
 		{
-			trigger_error($this->message, E_USER_ERROR);
+			$htmlErrors = ini_get('html_errors');
+			$trace = debug_backtrace();
+			$call = $trace[1];
+			$detail = ' In call to <em>'.$call['function'].'('.implode(', ', $call['args']).')</em> in <b>'.$call['file'].'</b> on line <b>'.$call['line'].'</b><br />'."\n";
+			if (!$htmlErrors)
+			{
+				$detail = strip_tags($detail);
+			}
+			trigger_error($this->message.$detail, E_USER_ERROR);
 		}
 	}
 }
