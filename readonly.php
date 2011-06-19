@@ -8,7 +8,8 @@ class ReadOnlyBase
 
 	protected function __construct($readOnly)
 	{
-		if ($readOnly === True)
+		$this->isReadOnly = ($readOnly === True);
+		if ($this->isReadOnly)
 		{
 			$this->message = 'Instances of '.get_called_class().' are read-only.';
 		}
