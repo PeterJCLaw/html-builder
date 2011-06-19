@@ -1,5 +1,7 @@
 <?php
 
+require_once('utils.php');
+
 class ReadOnlyBase
 {
 	protected $message;
