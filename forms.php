@@ -36,13 +36,13 @@ class FormBuilder
 				default:
 					$input = new HTMLElement('input');
 					$input->value = @$result->$id;
+					$input->type = $type;
 			}
 
 			$input->id = $input->name = $id;
 
 			if ($type == 'hidden')
 			{
-				$input->type = $type;
 				$hiddenInputs[$id] = $input;
 				continue;
 			}
