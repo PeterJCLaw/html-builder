@@ -57,7 +57,10 @@ class FormBuilder
 			$cell->appendChildren($input);
 
 			$label->for = $id;
-			$row->title = $input->title = $label->title = $field['title'];
+			if (isset($field['title']))
+			{
+				$row->title = $input->title = $label->title = $field['title'];
+			}
 			$label->appendChildren(self::idToName($id));
 
 			if ($result !== null && $result->isFieldInError($id))
