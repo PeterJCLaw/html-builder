@@ -44,6 +44,15 @@ class FormBuilder
 
 			$input->id = $input->name = $id;
 
+			if ($type == 'checkbox')
+			{
+				if (@$result->$id === true)
+				{
+					$input->checked = 'checked';
+				}
+				unset($input->value);
+			}
+
 			if ($type == 'hidden')
 			{
 				$hiddenInputs[$id] = $input;
@@ -254,10 +263,16 @@ class FormValidator
 			return;
 		}
 
+		$type = $this->getProperty($id, 'type');
+
+		if ($type == 'checkbox')
+		{
+			$value = (bool)$value;
+		}
+
 		// store the actual value
 		$result->$id = $value;
 
-		$type = $this->getProperty($id, 'type');
 		// TODO: make this comparison common somehow
 		if (in_array($type, array('float', 'integer', 'number')))
 		{
