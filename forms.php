@@ -35,7 +35,10 @@ class FormBuilder
 					break;
 				default:
 					$input = new HTMLElement('input');
-					$input->value = @$result->$id;
+					if (@$result->$id !== null)
+					{
+						$input->value = (string)$result->$id;
+					}
 					$input->type = $type;
 			}
 
