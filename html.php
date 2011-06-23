@@ -128,11 +128,20 @@ class HTMLElement
 	public function setAttribute($name, $value)
 	{
 		$this->attributes[$name] = $value;
+		if ($value === null)
+		{
+			unset($this->attributes[$name]);
+		}
 	}
 
 	public function __set($name, $value)
 	{
 		$this->setAttribute($name, $value);
+	}
+
+	public function __unset($name)
+	{
+		$this->__set($name, null);
 	}
 
 	public function __get($name)
