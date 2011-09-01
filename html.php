@@ -150,6 +150,20 @@ class HTMLElement
 	}
 
 	/**
+	 * Create a new HTMLElement and append it as a child of this element.
+	 * @param name The name of the element.
+	 * @param attributes Any attributes to add.
+	 * @param children Any children to add to the newly created element.
+	 * @returns The newly created element.
+	 */
+	public function createChild($name, $attributes = null, $children = null)
+	{
+		$elem = new HTMLElement($name, $attributes, $children);
+		$this->appendChildren($elem);
+		return $elem;
+	}
+
+	/**
 	 * Append an arbitrary number of children to the element.
 	 * @param children Children to add. These can be HTMLElements or strings.
 	 * @param isArray Whether or not the arguments are passed as an array.
